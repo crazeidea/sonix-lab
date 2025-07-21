@@ -27,7 +27,7 @@ export class HeroBg {
   velocities: THREE.Vector3[] = [];
 
   animationId = 0;
-  maxFrames = 300; // Limit to 1000 frames
+  boundary = 20;
 
   constructor() {
     afterNextRender(() => {
@@ -46,17 +46,17 @@ export class HeroBg {
 
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(75, width / height, 1, 10000);
-    this.camera.position.set(8, 8, 10);
+    this.camera.position.set(0, 0, 14);
 
     /** Particle 생성 */
-    const particleCount = 5000;
+    const particleCount = 10000;
     const positions: number[] = [];
     const colors: number[] = [];
 
     for (let i = 0; i < particleCount; i++) {
-      positions.push((Math.random() - 0.5) * 10); // X Axis
-      positions.push((Math.random() - 0.5) * 10); // Y Axis
-      positions.push((Math.random() - 0.5) * 10); // Z Axis
+      positions.push((Math.random() - 0.5) * 20); // X Axis
+      positions.push((Math.random() - 0.5) * 20); // Y Axis
+      positions.push((Math.random() - 0.5) * 20); // Z Axis
 
       colors.push(1.0, 0.8 + Math.random() * 0.1, 0.5 + Math.random() * 0.2);
 
@@ -111,6 +111,16 @@ export class HeroBg {
       positions.array[idx] += this.velocities[i].x;
       positions.array[idx + 1] += this.velocities[i].y;
       positions.array[idx + 2] += this.velocities[i].z;
+
+      if (
+        Math.abs(positions.array[idx]) > this.boundary ||
+        Math.abs(positions.array[idx + 1]) > this.boundary ||
+        Math.abs(positions.array[idx + 2]) > this.boundary
+      ) {
+        positions.array[idx] = (Math.random() - 0.5) * 20; // X
+        positions.array[idx + 1] = (Math.random() - 0.5) * 20; // Y
+        positions.array[idx + 2] = (Math.random() - 0.5) * 20; // Z
+      }
     }
 
     positions.needsUpdate = true;
