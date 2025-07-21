@@ -1,1 +1,10 @@
-/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+
+body {
+  @apply bg-neutral-950 selection:bg-neutral-800;
+}
+
+a[routerLink],
+a[href] {
+  @apply cursor-pointer;
+}
