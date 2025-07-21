@@ -1,1 +1,35 @@
-<section id="artists" class="h-dvh"></section>
+<section
+  id="artists"
+  class="h-dvh text-white flex justify-center items-center flex-col container mx-auto gap-8"
+>
+  <h1 class="text-6xl font-extrabold">Artists</h1>
+
+  <div class="h-px w-full bg-white"></div>
+
+  <div class="flex flex-col items-end w-full">
+    <p>We are Sonix Lab —</p>
+    <p>a collective of young sound technology creators</p>
+    <p>who design sound and expand perception through technology</p>
+  </div>
+  <div class="flex flex-col items-start w-full">
+    <p>저희는 사운드를 설계하고 기술로 감각을 확장하는</p>
+    <p>젊은 사운드 테크놀로지 크리어에터들로 구성된</p>
+    <p>Sonix Lab입니다.</p>
+  </div>
+
+  <swiper-container slides-per-view="5">
+    @for (artist of artists; track $index) {
+    <swiper-slide>
+      <img
+        [src]="artist.name + '.jpeg'"
+        [alt]="artist.name"
+        class="grayscale hover:grayscale-0 w-full aspect-[9/16] object-cover"
+        style="transition: filter 0.3s ease-in-out"
+      />
+      <p>{{ artist.name }}</p>
+      <p>{{ artist.role }}</p>
+      <p>&#64;{{ artist.instagram }}</p>
+    </swiper-slide>
+    }
+  </swiper-container>
+</section>

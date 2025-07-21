@@ -1,7 +1,10 @@
 @import "tailwindcss";
 
+* {
+  @apply selection:bg-neutral-900;
+}
 body {
-  @apply bg-neutral-950 selection:bg-neutral-800;
+  @apply bg-black;
 }
 
 a[routerLink],

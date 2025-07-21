@@ -3,6 +3,7 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  HostListener,
   inject,
 } from '@angular/core';
 import * as THREE from 'three';
@@ -126,5 +127,17 @@ export class HeroBg {
     positions.needsUpdate = true;
 
     this.renderer.render(this.scene, this.camera);
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    if (!this.renderer || !this.camera) return;
+
+    const width = this.elementRef.nativeElement.clientWidth;
+    const height = this.elementRef.nativeElement.clientHeight;
+
+    this.renderer.setSize(width, height);
+    this.camera.aspect = width / height;
+    this.camera.updateProjectionMatrix();
   }
 }
