@@ -5,6 +5,7 @@ import {
   ElementRef,
   HostListener,
   inject,
+  ViewChild,
 } from '@angular/core';
 import * as THREE from 'three';
 
@@ -19,125 +20,145 @@ import * as THREE from 'three';
 export class HeroBg {
   private readonly elementRef = inject(ElementRef);
 
-  renderer: THREE.WebGLRenderer | null = null;
-  scene: THREE.Scene | null = null;
-  camera: THREE.PerspectiveCamera | null = null;
-  particleSystem: THREE.Points | null = null;
-  particleGeometry: THREE.BufferGeometry | null = null;
+  private scene!: THREE.Scene;
+  private camera!: THREE.PerspectiveCamera;
+  private renderer!: THREE.WebGLRenderer;
+  private particles!: THREE.Points;
+  private geometry!: THREE.BufferGeometry;
+  private velocities!: Float32Array;
 
-  velocities: THREE.Vector3[] = [];
+  private particleCount = 5000;
 
-  animationId = 0;
-  boundary = 20;
+  constructor() {}
 
-  constructor() {
-    afterNextRender(() => {
-      this.initialize();
-      this.animate();
-    });
+  ngOnInit(): void {
+    this.initThree();
+    this.createParticles();
+    this.animate();
   }
 
-  initialize() {
-    const width = this.elementRef.nativeElement.clientWidth;
-    const height = this.elementRef.nativeElement.clientHeight;
+  ngOnDestroy(): void {
+    this.renderer.dispose();
+    this.geometry.dispose();
+    (this.particles.material as THREE.Material).dispose();
+  }
 
+  private initThree(): void {
+    const width = this.elementRef.nativeElement.clientWidth;
+    const height = window.innerHeight;
+
+    // Scene
+    this.scene = new THREE.Scene();
+
+    // Camera
+    this.camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+    this.camera.position.z = 50;
+
+    // Renderer
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
     this.renderer.setSize(width, height);
     this.elementRef.nativeElement.appendChild(this.renderer.domElement);
 
-    this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(75, width / height, 1, 10000);
-    this.camera.position.set(0, 0, 14);
-
-    /** Particle 생성 */
-    const particleCount = 10000;
-    const positions: number[] = [];
-    const colors: number[] = [];
-
-    for (let i = 0; i < particleCount; i++) {
-      positions.push((Math.random() - 0.5) * 20); // X Axis
-      positions.push((Math.random() - 0.5) * 20); // Y Axis
-      positions.push((Math.random() - 0.5) * 20); // Z Axis
-
-      colors.push(1.0, 0.8 + Math.random() * 0.1, 0.5 + Math.random() * 0.2);
-
-      this.velocities.push(
-        new THREE.Vector3(
-          Math.random() * 0.04 + 0.01,
-          Math.random() * 0.02 + 0.01,
-          Math.random() * 0.01
-        )
-      );
-    }
-
-    this.particleGeometry = new THREE.BufferGeometry();
-    this.particleGeometry.setAttribute(
-      'position',
-      new THREE.Float32BufferAttribute(positions, 3)
-    );
-    this.particleGeometry.setAttribute(
-      'color',
-      new THREE.Float32BufferAttribute(colors, 3)
-    );
-
-    const material = new THREE.PointsMaterial({
-      size: 0.1,
-      opacity: 0.4,
-      vertexColors: true,
-      transparent: true,
-      depthWrite: false,
-      blending: THREE.AdditiveBlending,
-    });
-
-    this.particleSystem = new THREE.Points(this.particleGeometry, material);
-
-    this.scene.add(this.particleSystem);
+    window.addEventListener('resize', this.onWindowResize.bind(this));
   }
 
-  animate() {
-    if (!this.renderer || !this.scene || !this.camera) {
-      console.warn('Renderer, scene, or camera not initialized');
-      return;
+  private createParticles(): void {
+    this.geometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(this.particleCount * 3);
+    this.velocities = new Float32Array(this.particleCount * 3);
+    const colors = new Float32Array(this.particleCount * 3);
+
+    const color = new THREE.Color();
+
+    for (let i = 0; i < this.particleCount; i++) {
+      const i3 = i * 3;
+
+      // Initial position (center of the explosion)
+      positions[i3] = 0;
+      positions[i3 + 1] = 0;
+      positions[i3 + 2] = 0;
+
+      // Initial velocity (random direction for explosion)
+      const phi = Math.random() * Math.PI * 2;
+      const theta = Math.random() * Math.PI;
+      const speed = Math.random() * 5 + 2;
+
+      this.velocities[i3] = Math.sin(theta) * Math.cos(phi) * speed;
+      this.velocities[i3 + 1] = Math.sin(theta) * Math.sin(phi) * speed;
+      this.velocities[i3 + 2] = Math.cos(theta) * speed;
+
+      // Color
+      color.setHSL(0.1 + Math.random() * 0.1, 0.7, 0.5 + Math.random() * 0.2);
+      colors[i3] = color.r;
+      colors[i3 + 1] = color.g;
+      colors[i3 + 2] = color.b;
     }
 
-    this.animationId = requestAnimationFrame(() => this.animate());
+    this.geometry.setAttribute(
+      'position',
+      new THREE.BufferAttribute(positions, 3)
+    );
+    this.geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-    const positions = this.particleGeometry?.attributes[
-      'position'
-    ] as THREE.BufferAttribute;
+    const material = new THREE.PointsMaterial({
+      size: 0.5,
+      vertexColors: true,
+      blending: THREE.AdditiveBlending,
+      transparent: true,
+      opacity: 0.8,
+    });
 
-    for (let i = 0; i < positions.count; i++) {
-      const idx = i * 3;
+    this.particles = new THREE.Points(this.geometry, material);
+    this.scene.add(this.particles);
+  }
 
-      positions.array[idx] += this.velocities[i].x;
-      positions.array[idx + 1] += this.velocities[i].y;
-      positions.array[idx + 2] += this.velocities[i].z;
+  private animate(): void {
+    requestAnimationFrame(this.animate.bind(this));
 
-      if (
-        Math.abs(positions.array[idx]) > this.boundary ||
-        Math.abs(positions.array[idx + 1]) > this.boundary ||
-        Math.abs(positions.array[idx + 2]) > this.boundary
-      ) {
-        positions.array[idx] = (Math.random() - 0.5) * 20; // X
-        positions.array[idx + 1] = (Math.random() - 0.5) * 20; // Y
-        positions.array[idx + 2] = (Math.random() - 0.5) * 20; // Z
+    const positions = [];
+
+    for (let i = 0; i < this.particleCount; i++) {
+      const i3 = i * 3;
+
+      // Update position with velocity
+      positions[i3] += this.velocities[i3] * 0.05;
+      positions[i3 + 1] += this.velocities[i3 + 1] * 0.05;
+      positions[i3 + 2] += this.velocities[i3 + 2] * 0.05;
+
+      // Add a constant velocity to the right
+      this.velocities[i3] += 0.03;
+
+      // Add a slight downward pull (gravity)
+      this.velocities[i3 + 1] -= 0.003;
+
+      // Reset particles that have moved off-screen to create a continuous flow
+      if (positions[i3] > 100) {
+        positions[i3] = 0;
+        positions[i3 + 1] = 0;
+        positions[i3 + 2] = 0;
+
+        const phi = Math.random() * Math.PI * 2;
+        const theta = Math.random() * Math.PI;
+        const speed = Math.random() * 5 + 2;
+
+        this.velocities[i3] = Math.sin(theta) * Math.cos(phi) * speed;
+        this.velocities[i3 + 1] = Math.sin(theta) * Math.sin(phi) * speed;
+        this.velocities[i3 + 2] = Math.cos(theta) * speed;
       }
     }
 
-    positions.needsUpdate = true;
+    // this.geometry.attributes.position.needsUpdate = true;
 
     this.renderer.render(this.scene, this.camera);
   }
 
-  @HostListener('window:resize')
-  onResize() {
-    if (!this.renderer || !this.camera) return;
-
+  private onWindowResize(): void {
     const width = this.elementRef.nativeElement.clientWidth;
-    const height = this.elementRef.nativeElement.clientHeight;
+    const height = window.innerHeight;
 
-    this.renderer.setSize(width, height);
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
+
+    this.renderer.setSize(width, height);
   }
 }

@@ -5,8 +5,8 @@ import { Component } from '@angular/core';
   templateUrl: './logo.svg',
   styles: `
     svg {
-      width: 100%;
-      height: auto;
+      width: auto;
+      height:  100%;
     }
   `,
 })

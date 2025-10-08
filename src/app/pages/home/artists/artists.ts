@@ -1,6 +1,12 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  CUSTOM_ELEMENTS_SCHEMA,
+  ElementRef,
+  viewChild,
+} from '@angular/core';
 
-import { register } from 'swiper/element/bundle';
+import { register, SwiperContainer } from 'swiper/element/bundle';
 register();
 
 @Component({
@@ -13,7 +19,9 @@ register();
     ngSkipHydration: 'true',
   },
 })
-export class Artists {
+export class Artists implements AfterViewInit {
+  swiperRef = viewChild<ElementRef<SwiperContainer>>('swiperRef');
+
   artists: {
     name: string;
     role: string;
@@ -45,4 +53,19 @@ export class Artists {
       instagram: 'lyseo_mt',
     },
   ];
+
+  ngAfterViewInit(): void {
+    const swiper = this.swiperRef()?.nativeElement;
+
+    if (swiper) {
+      Object.assign(swiper, {
+        slidesPerView: 1,
+        breakpoints: {
+          640: {
+            slidesPerView: 5,
+          },
+        },
+      });
+    }
+  }
 }

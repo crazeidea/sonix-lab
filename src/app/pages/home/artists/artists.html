@@ -1,8 +1,8 @@
 <section
   id="artists"
-  class="h-dvh text-white flex justify-center items-center flex-col container mx-auto gap-8"
+  class="min-h-dvh text-white flex flex-col container mx-auto gap-8 py-8"
 >
-  <h1 class="text-6xl font-extrabold">Artists</h1>
+  <h1 class="text-3xl sm:text-4xl font-extrabold">Artists</h1>
 
   <div class="h-px w-full bg-white"></div>
 
@@ -17,7 +17,7 @@
     <p>Sonix Lab입니다.</p>
   </div>
 
-  <swiper-container slides-per-view="5">
+  <swiper-container #swiperRef class="w-full">
     @for (artist of artists; track $index) {
     <swiper-slide>
       <img

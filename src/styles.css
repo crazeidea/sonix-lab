@@ -1,8 +1,14 @@
 @import "tailwindcss";
 
+@layer utilities {
+  .container {
+  }
+}
+
 * {
   @apply selection:bg-neutral-900;
 }
+
 body {
   @apply bg-black;
 }
