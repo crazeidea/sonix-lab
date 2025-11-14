@@ -10,6 +10,13 @@ export const routes: Routes = [
         path: '',
         loadComponent: () => import('./pages/home/home.page'),
       },
+      {
+        path: 'sand-in-your-eyes',
+        loadComponent: () =>
+          import(
+            './pages/sand-in-your-eyes/sand-in-your-eyes/sand-in-your-eyes.page'
+          ),
+      },
     ],
   },
 ];

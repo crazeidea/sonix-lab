@@ -1,27 +1,53 @@
-<div class="flex flex-col">
-  <header
-    class="flex justify-between items-center fixed top-0 bg-transparent w-full p-4 z-10"
-  >
-    <app-logo class="sm:h-24 h-10 text-white" />
+<div class="drawer drawer-end">
+  <input id="my-drawer-1" type="checkbox" class="drawer-toggle" />
 
-    <div
-      class="hidden md:flex gap-8 font-bold items-center absolute left-1/2 -translate-x-1/2"
-    >
-      <a href="#hero" class="text-white">HOME</a>
-      <a href="#artists" class="text-white">ARTISTS</a>
-      <a class="text-white">2025 SUMMER PROJECT</a>
-    </div>
+  <div class="drawer-content">
+    <header class="sticky top-0 z-40">
+      <div class="navbar bg-base-100 shadow-sm">
+        <div class="navbar-start">
+          <a href="#hero" class="h-10 sm:h-16">
+            <app-logo class="sm:h-16 h-10 text-white" />
+          </a>
+        </div>
+        <div class="navbar-center hidden lg:flex">
+          <ul class="menu menu-horizontal px-1">
+            <li><a href="#intro">Intro</a></li>
+            <li><a href="#artists">Artists</a></li>
+            <li><a routerLink="/sand-in-your-eyes">Sand in Your Eyes</a></li>
+          </ul>
+        </div>
+        <div class="navbar-end">
+          <label for="my-drawer-1" class="btn btn-square btn-ghost lg:hidden">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="currentColor"
+                d="M3 18v-2h18v2zm0-5v-2h18v2zm0-5V6h18v2z"
+              />
+            </svg>
+          </label>
+        </div>
+      </div>
+    </header>
 
-    <button>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="32"
-        height="32"
-        viewBox="0 0 24 24"
-      >
-        <path fill="white" d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z" />
-      </svg>
-    </button>
-  </header>
-  <router-outlet />
+    <router-outlet />
+  </div>
+
+  <div class="drawer-side z-50">
+    <label
+      for="my-drawer-1"
+      aria-label="close sidebar"
+      class="drawer-overlay"
+    ></label>
+    <ul class="menu bg-base-200 min-h-full w-80 p-4">
+      <!-- Sidebar content here -->
+      <li><a href="#intro">Intro</a></li>
+      <li><a href="#artists">Artists</a></li>
+      <li><a routerLink="/sand-in-your-eyes">Sand in Your Eyes</a></li>
+    </ul>
+  </div>
 </div>

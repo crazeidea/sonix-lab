@@ -1,6 +1,6 @@
 <section
   id="artists"
-  class="min-h-dvh text-white flex flex-col container mx-auto gap-8 py-8"
+  class="min-h-dvh text-white flex flex-col container gap-8 py-8"
 >
   <h1 class="text-3xl sm:text-4xl font-extrabold">Artists</h1>
 
@@ -17,19 +17,52 @@
     <p>Sonix Lab입니다.</p>
   </div>
 
-  <swiper-container #swiperRef class="w-full">
-    @for (artist of artists; track $index) {
-    <swiper-slide>
-      <img
-        [src]="artist.name + '.jpeg'"
-        [alt]="artist.name"
-        class="grayscale hover:grayscale-0 w-full aspect-[9/16] object-cover"
-        style="transition: filter 0.3s ease-in-out"
-      />
-      <p>{{ artist.name }}</p>
-      <p>{{ artist.role }}</p>
-      <p>&#64;{{ artist.instagram }}</p>
-    </swiper-slide>
+  <div role="list" class="flex overflow-x-auto snap-x">
+    @for (artist of artists.value(); track $index) {
+      <button
+        class="card bg-base-100 lg:min-w-auto lg:basis-1/5 min-w-screen snap-center shadow-sm"
+        (click)="
+          artistDetailDialog.setAttribute('data-artist', artist.name);
+          artistDetailDialog.showModal()
+        "
+      >
+        <figure>
+          <img
+            [src]="artist.name + '.jpeg'"
+            [alt]="artist.name"
+            class="grayscale hover:grayscale-0 w-full aspect-[9/16] object-cover"
+            style="transition: filter 0.3s ease-in-out"
+          />
+        </figure>
+        <div class="card-body *:text-left">
+          <h2 class="card-title">{{ artist.name }}</h2>
+          <p>{{ artist.role }}</p>
+          <p>&#64;{{ artist.instagram }}</p>
+        </div>
+      </button>
     }
-  </swiper-container>
+  </div>
 </section>
+
+<dialog #artistDetailDialog class="modal">
+  @let name = artistDetailDialog.getAttribute("data-artist");
+  @if (name) {
+    @let artist = getArtist(name);
+    @if (artist) {
+      <div class="modal-box bg-base-200">
+        <img
+          [src]="artist.name + '.jpeg'"
+          [alt]="artist.name"
+          class="w-full aspect-[1/1] object-cover object-center mb-4"
+        />
+        <h2 class="text-2xl font-extrabold">{{ artist.name }}</h2>
+        <p>{{ artist.role }}</p>
+        <p>&#64;{{ artist.instagram }}</p>
+      </div>
+
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+    }
+  }
+</dialog>
