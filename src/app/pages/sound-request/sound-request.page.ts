@@ -122,7 +122,6 @@ export default class SoundRequestPage {
   }
 
   closeTicket() {
-    this.completeModalRef().nativeElement.close();
     this.router.navigateByUrl('/', { replaceUrl: true });
   }
 }
