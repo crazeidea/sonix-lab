@@ -1,29 +1,54 @@
-import { inject, Injectable, resource } from "@angular/core";
-import { SupabaseService } from "./supabase.service";
-import { CreateSoundRequest, SoundRequest } from "../libs/sound-request.interface";
+import { computed, inject, Injectable, resource } from '@angular/core';
+import { SupabaseService } from './supabase.service';
+import {
+  CreateSoundRequest,
+  SoundRequest,
+} from '../libs/sound-request.interface';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class SoundRequestService {
-    private readonly supabaseService = inject(SupabaseService)
+  private readonly supabaseService = inject(SupabaseService);
 
-    soundRequests$ = resource<SoundRequest[], any>({
-        loader: () => this.supabaseService.supabase.from('sound_request').select('*').then(res => res.data as SoundRequest[]),
-        defaultValue: []
-    })
+  soundRequests$ = resource<SoundRequest[], any>({
+    loader: () =>
+      this.supabaseService.supabase
+        .from('sound_request')
+        .select('*')
+        .then((res) => res.data as SoundRequest[]),
+    defaultValue: [],
+  });
 
+  pendingSoundRequests = computed(() =>
+    this.soundRequests$.value().filter((req) => req.status === '대기중'),
+  );
 
-    async findById(id: string): Promise<SoundRequest> {
-      const {data} = await this.supabaseService.supabase.from('sound_request').select('*').eq('id', id)
+  processingSoundRequests = computed(() =>
+    this.soundRequests$.value().filter((req) => req.status === '진행중'),
+  );
 
-      if (data) {
-        return data.at(0) as SoundRequest
-      }
+  completedSoundRequests = computed(() =>
+    this.soundRequests$.value().filter((req) => req.status === '완료'),
+  );
 
-      throw new Error('Sound request not found')
+  cancelledSoundRequests = computed(() =>
+    this.soundRequests$.value().filter((req) => req.status === '취소됨'),
+  );
+
+  async findById(id: string): Promise<SoundRequest> {
+    const { data } = await this.supabaseService.supabase
+      .from('sound_request')
+      .select('*')
+      .eq('id', id);
+
+    if (data) {
+      return data.at(0) as SoundRequest;
     }
-    
+
+    throw new Error('Sound request not found');
+  }
+
   async create(req: CreateSoundRequest) {
-    const data: Omit<CreateSoundRequest, 'file'> & {image_path: string} = {
+    const data: Omit<CreateSoundRequest, 'file'> & { image_path: string } = {
       name: req.name,
       email: req.email,
       characterName: req.characterName,
@@ -42,11 +67,21 @@ export class SoundRequestService {
       );
 
     if (image) {
-      data.image_path = `https://gimbbfiberrxqmlulbsy.supabase.co/storage/v1/object/public/${image.fullPath}`
+      data.image_path = `https://gimbbfiberrxqmlulbsy.supabase.co/storage/v1/object/public/${image.fullPath}`;
     }
 
     await this.supabaseService.supabase.from('sound_request').insert([data]);
 
     return data;
+  }
+
+  async updateStatus(
+    id: string,
+    status: '대기중' | '진행중' | '완료' | '취소됨',
+  ) {
+    await this.supabaseService.supabase
+      .from('sound_request')
+      .update({ status })
+      .eq('id', id);
   }
 }

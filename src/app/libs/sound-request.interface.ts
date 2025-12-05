@@ -9,6 +9,7 @@ export interface SoundRequest {
   description: string;
   image_path: string;
   created_at: Date;
+  status: '대기중' | '진행중' | '완료' | '취소됨';
 }
 
 export interface CreateSoundRequest {

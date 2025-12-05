@@ -1,8 +1,28 @@
 <main class="container">
-    <div class="stats stats-vertical sm:stats-horizontal shadow w-full">
-        <div class="stat" [routerLink]="['/admin', 'sound-request']">
-            <div class="stat-title">제작 요청</div>
-            <div class="stat-value">{{soundRequestService.soundRequests$.value().length | number}}건</div>
-        </div>
+  <div class="stats stats-vertical sm:stats-horizontal shadow w-full">
+    <div class="stat" [routerLink]="['/admin', 'sound-request']">
+      <div class="stat-title">대기 중인 제작 요청</div>
+      <div class="stat-value">
+        {{ soundRequestService.pendingSoundRequests().length | number }}건
+      </div>
     </div>
+    <div class="stat" [routerLink]="['/admin', 'sound-request']">
+      <div class="stat-title">진행 중인 제작 요청</div>
+      <div class="stat-value">
+        {{ soundRequestService.processingSoundRequests().length | number }}건
+      </div>
+    </div>
+    <div class="stat" [routerLink]="['/admin', 'sound-request']">
+      <div class="stat-title">완료된 제작 요청</div>
+      <div class="stat-value">
+        {{ soundRequestService.completedSoundRequests().length | number }}건
+      </div>
+    </div>
+    <div class="stat" [routerLink]="['/admin', 'sound-request']">
+      <div class="stat-title">취소된 제작 요청</div>
+      <div class="stat-value">
+        {{ soundRequestService.cancelledSoundRequests().length | number }}건
+      </div>
+    </div>
+  </div>
 </main>

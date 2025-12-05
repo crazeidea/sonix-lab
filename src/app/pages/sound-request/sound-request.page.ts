@@ -5,7 +5,7 @@ import {
   CUSTOM_ELEMENTS_SCHEMA,
   ElementRef,
   inject,
-  viewChild
+  viewChild,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -17,7 +17,7 @@ import {
 } from '@angular/forms';
 import { startWith } from 'rxjs';
 import { SwiperContainer } from 'swiper/element';
-import { Logo } from "../../components/logo/logo";
+import { Logo } from '../../components/logo/logo';
 import { DataUrlPipe } from '../../pipes/data-url.pipe';
 import { SupabaseService } from '../../services/supabase.service';
 import { Router } from '@angular/router';
@@ -32,9 +32,10 @@ import { SoundRequestService } from '../../services/sound-request.service';
 })
 export default class SoundRequestPage {
   private readonly soundRequestService = inject(SoundRequestService);
-  private readonly router = inject(Router)
+  private readonly router = inject(Router);
 
-  private readonly completeModalRef = viewChild.required<ElementRef<HTMLDialogElement>>('completeModal'); 
+  private readonly completeModalRef =
+    viewChild.required<ElementRef<HTMLDialogElement>>('completeModal');
 
   form = new FormGroup({
     name: new FormControl<string>('', {
@@ -122,6 +123,6 @@ export default class SoundRequestPage {
 
   closeTicket() {
     this.completeModalRef().nativeElement.close();
-    this.router.navigateByUrl('/', {replaceUrl: true})
+    this.router.navigateByUrl('/', { replaceUrl: true });
   }
 }

@@ -32,11 +32,10 @@ export class ArtistsSection implements AfterViewInit {
 
   swiperOptions: SwiperOptions = {
     slidesPerView: 1.5,
-    spaceBetween: 0,
+    spaceBetween:16,
     breakpoints: {
       640: {
         slidesPerView: 3.5,
-        spaceBetween:16,
       },
    
     }

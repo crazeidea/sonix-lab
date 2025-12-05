@@ -1,5 +1,10 @@
 <div class="drawer drawer-end">
-  <input id="my-drawer-1" type="checkbox" class="drawer-toggle" />
+  <input
+    #drawerCheckbox
+    id="my-drawer-1"
+    type="checkbox"
+    class="drawer-toggle"
+  />
 
   <div class="drawer-content">
     <header class="sticky top-0 z-40">
@@ -18,8 +23,16 @@
         </div>
         <div class="navbar-end">
           <label for="my-drawer-1" class="btn btn-square btn-ghost lg:hidden">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
-              <path fill="currentColor" d="M3 18v-2h18v2zm0-5v-2h18v2zm0-5V6h18v2z" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="currentColor"
+                d="M3 18v-2h18v2zm0-5v-2h18v2zm0-5V6h18v2z"
+              />
             </svg>
           </label>
         </div>
@@ -30,12 +43,23 @@
   </div>
 
   <div class="drawer-side z-50">
-    <label for="my-drawer-1" aria-label="close sidebar" class="drawer-overlay"></label>
+    <label
+      for="my-drawer-1"
+      aria-label="close sidebar"
+      class="drawer-overlay"
+    ></label>
     <ul class="menu bg-base-200 min-h-full w-80 p-4">
-      <!-- Sidebar content here -->
-      <li><a href="#intro">Intro</a></li>
-      <li><a href="#artists">Artists</a></li>
-      <li><a href="/sound-request">Sound Request</a></li>
+      <li>
+        <a (click)="drawerCheckbox.checked = false" href="#intro">Intro</a>
+      </li>
+      <li>
+        <a (click)="drawerCheckbox.checked = false" href="#artists">Artists</a>
+      </li>
+      <li>
+        <a (click)="drawerCheckbox.checked = false" href="/sound-request"
+          >Sound Request</a
+        >
+      </li>
     </ul>
   </div>
 </div>

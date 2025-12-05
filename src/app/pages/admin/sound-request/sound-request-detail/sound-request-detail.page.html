@@ -1,49 +1,94 @@
 @if (soundRequest$.value(); as request) {
-<main class="container py-8 flex flex-col gap-8">
+  <main class="container py-8 flex flex-col gap-8">
     <header class="flex justify-between items-center">
-        <button class="btn btn-ghost" routerLink="..">목록으로</button>
-        <button class="btn btn-primary">수정</button>
+      <button class="btn btn-ghost" routerLink="..">목록으로</button>
+
+      <div class="join">
+        <button
+          class="btn join-item"
+          [class.btn-active]="request.status === '대기중'"
+          (click)="updateStatus('대기중')"
+          [disabled]="request.status === '대기중'"
+        >
+          대기중
+        </button>
+        <button
+          class="btn join-item btn-info"
+          [class.btn-active]="request.status === '진행중'"
+          (click)="updateStatus('진행중')"
+          [disabled]="request.status === '진행중'"
+        >
+          진행중
+        </button>
+        <button
+          class="btn join-item btn-success"
+          [class.btn-active]="request.status === '완료'"
+          (click)="updateStatus('완료')"
+          [disabled]="request.status === '완료'"
+        >
+          완료
+        </button>
+        <button
+          class="btn join-item btn-error"
+          [class.btn-active]="request.status === '취소됨'"
+          (click)="updateStatus('취소됨')"
+          [disabled]="request.status === '취소됨'"
+        >
+          취소됨
+        </button>
+      </div>
     </header>
 
-    <div class="info-grid">
-        <h3>기본 정보</h3>
-        <legend>이름 / 텀블벅 아이디</legend>
-        <span>{{request.name}}</span>
-        <legend>이메일</legend>
-        <span>{{request.email}}</span>
-        <legend>이름</legend>
-        <span>{{request.characterName}}</span>
-        <legend>나이</legend>
-        <span>{{request.characterAge}}</span>
-        <legend>국적 / 배경</legend>
-        <span>{{request.characterCountry}}</span>
-        <legend>체류지</legend>
-        <span>{{request.characterLocation}}</span>
-        <legend>체류지</legend>
-        <span>{{request.characterLocation}}</span>
-        <legend>체류지</legend>
-        <span>{{request.characterLocation}}</span>
+    @if (request.status === "대기중") {
+      <div class="alert">이 요청은 대기중입니다.</div>
+    }
 
+    @if (request.status === "진행중") {
+      <div class="alert alert-warning">이 요청은 진행중입니다.</div>
+    }
+
+    @if (request.status === "완료") {
+      <div class="alert alert-success">이 요청은 완료되었습니다.</div>
+    }
+
+    @if (request.status === "취소됨") {
+      <div class="alert alert-error">이 요청은 취소되었습니다.</div>
+    }
+
+    <div class="info-grid">
+      <h3>기본 정보</h3>
+      <legend>이름 / 텀블벅 아이디</legend>
+      <span>{{ request.name }}</span>
+      <legend>이메일</legend>
+      <span>{{ request.email }}</span>
+      <legend>이름</legend>
+      <span>{{ request.characterName }}</span>
+      <legend>나이</legend>
+      <span>{{ request.characterAge }}</span>
+      <legend>국적 / 배경</legend>
+      <span>{{ request.characterCountry }}</span>
+      <legend>체류지</legend>
+      <span>{{ request.characterLocation }}</span>
     </div>
 
     <section class="flex flex-col gap-2">
-        <legend class="font-bold">이미지</legend>
-        <img [src]="request.image_path" />
+      <legend class="font-bold">주문제작서</legend>
+      <p class="whitespace-pre-line">
+        {{ request.description }}
+      </p>
     </section>
 
-    <section class="flex flex-col gap-2">
-        <legend class="font-bold">주문제작서</legend>
-        <p class="whitespace-pre-line">
-            {{request.description}}
-        </p>
+    <section class="space-y-2">
+      <legend class="font-bold">이미지</legend>
+      <img class="h-96 w-auto" [src]="request.image_path" />
     </section>
 
-    <button class="btn  flex sm:hidden btn-block" routerLink="..">목록으로</button>
-
-</main>
-
+    <button class="btn flex sm:hidden btn-block" routerLink="..">
+      목록으로
+    </button>
+  </main>
 } @else {
-<div class="size-full flex justify-center items-center">
+  <div class="size-full flex justify-center items-center">
     <div class="loading loading-dots"></div>
-</div>
+  </div>
 }
