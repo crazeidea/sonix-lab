@@ -50,13 +50,23 @@
     ></label>
     <ul class="menu bg-base-200 min-h-full w-80 p-4">
       <li>
-        <a (click)="drawerCheckbox.checked = false" href="#intro">Intro</a>
+        <a
+          (click)="drawerCheckbox.checked = false"
+          routerLink="/"
+          fragment="intro"
+          >Home</a
+        >
       </li>
       <li>
-        <a (click)="drawerCheckbox.checked = false" href="#artists">Artists</a>
+        <a
+          (click)="drawerCheckbox.checked = false"
+          routerLink="/"
+          fragment="artists"
+          >Artists</a
+        >
       </li>
       <li>
-        <a (click)="drawerCheckbox.checked = false" href="/sound-request"
+        <a (click)="drawerCheckbox.checked = false" routerLink="sound-request"
           >Sound Request</a
         >
       </li>
