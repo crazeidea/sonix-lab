@@ -1,0 +1,8 @@
+<main class="container">
+    <div class="stats stats-vertical sm:stats-horizontal shadow w-full">
+        <div class="stat" [routerLink]="['/admin', 'sound-request']">
+            <div class="stat-title">제작 요청</div>
+            <div class="stat-value">{{soundRequestService.soundRequests$.value().length | number}}건</div>
+        </div>
+    </div>
+</main>

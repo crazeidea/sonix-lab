@@ -21,6 +21,7 @@ import { Logo } from "../../components/logo/logo";
 import { DataUrlPipe } from '../../pipes/data-url.pipe';
 import { SupabaseService } from '../../services/supabase.service';
 import { Router } from '@angular/router';
+import { SoundRequestService } from '../../services/sound-request.service';
 
 @Component({
   selector: 'app-sound-request',
@@ -30,7 +31,7 @@ import { Router } from '@angular/router';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export default class SoundRequestPage {
-  private readonly supabaseService = inject(SupabaseService);
+  private readonly soundRequestService = inject(SoundRequestService);
   private readonly router = inject(Router)
 
   private readonly completeModalRef = viewChild.required<ElementRef<HTMLDialogElement>>('completeModal'); 
@@ -105,7 +106,7 @@ export default class SoundRequestPage {
   async submit() {
     const value = this.form.getRawValue();
 
-    await this.supabaseService.createSoundRequest({
+    await this.soundRequestService.create({
       name: value.name,
       email: value.email,
       characterName: value.characterName,

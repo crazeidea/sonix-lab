@@ -1,0 +1,14 @@
+<div class="flex w-screen h-screen overflow-hidden items-stretch">
+    <aside class="menu bg-base-200 rounded-box w-56 hidden sm:flex">
+        <li><a routerLink="/admin/home">홈</a></li>
+        <li><a routerLink="/admin/sound-request">제작 요청</a></li>
+        <li><a></a></li>
+    </aside>
+    <main class="flex-1 overflow-y-auto">
+        <header class="block sm:hidden bg-base-200 p-4">
+            <div class="flex justify-between items-center">
+            </div>
+        </header>
+        <router-outlet />
+    </main>
+</div>

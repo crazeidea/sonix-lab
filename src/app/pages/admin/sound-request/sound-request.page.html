@@ -1,0 +1,22 @@
+<main class="container size-full flex flex-col gap-8 py-8">
+    <h2>제작 요청</h2>
+
+    <table class="table table-auto hidden w-full">
+        <thead>
+            <tr>
+                <th>이름</th>
+                <th>이메일</th>
+                <th>등록일</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (request of soundRequestService.soundRequests$.value(); track request.id ) {
+            <tr [routerLink]="request.id">
+                <td>{{ request.name }}</td>
+                <td>{{ request.email }}</td>
+                <td>{{request.created_at | date:'medium'}}</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</main>

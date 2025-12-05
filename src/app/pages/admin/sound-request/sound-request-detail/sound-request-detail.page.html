@@ -1,0 +1,49 @@
+@if (soundRequest$.value(); as request) {
+<main class="container py-8 flex flex-col gap-8">
+    <header class="flex justify-between items-center">
+        <button class="btn btn-ghost" routerLink="..">목록으로</button>
+        <button class="btn btn-primary">수정</button>
+    </header>
+
+    <div class="info-grid">
+        <h3>기본 정보</h3>
+        <legend>이름 / 텀블벅 아이디</legend>
+        <span>{{request.name}}</span>
+        <legend>이메일</legend>
+        <span>{{request.email}}</span>
+        <legend>이름</legend>
+        <span>{{request.characterName}}</span>
+        <legend>나이</legend>
+        <span>{{request.characterAge}}</span>
+        <legend>국적 / 배경</legend>
+        <span>{{request.characterCountry}}</span>
+        <legend>체류지</legend>
+        <span>{{request.characterLocation}}</span>
+        <legend>체류지</legend>
+        <span>{{request.characterLocation}}</span>
+        <legend>체류지</legend>
+        <span>{{request.characterLocation}}</span>
+
+    </div>
+
+    <section class="flex flex-col gap-2">
+        <legend class="font-bold">이미지</legend>
+        <img [src]="request.image_path" />
+    </section>
+
+    <section class="flex flex-col gap-2">
+        <legend class="font-bold">주문제작서</legend>
+        <p class="whitespace-pre-line">
+            {{request.description}}
+        </p>
+    </section>
+
+    <button class="btn  flex sm:hidden btn-block" routerLink="..">목록으로</button>
+
+</main>
+
+} @else {
+<div class="size-full flex justify-center items-center">
+    <div class="loading loading-dots"></div>
+</div>
+}

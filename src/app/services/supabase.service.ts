@@ -8,7 +8,7 @@ import {
 
 @Injectable({ providedIn: 'root' })
 export class SupabaseService {
-  private supabase: SupabaseClient;
+  public supabase: SupabaseClient;
 
   constructor() {
     this.supabase = new SupabaseClient(
@@ -17,31 +17,19 @@ export class SupabaseService {
     );
   }
 
-  async createSoundRequest(req: CreateSoundRequest) {
-    const data: SoundRequest = {
-      name: req.name,
-      email: req.email,
-      characterName: req.characterName,
-      characterAge: req.characterAge,
-      characterCountry: req.characterCountry,
-      characterLocation: req.characterLocation,
-      description: req.description,
-      image_path: '',
-    };
 
-    const { data: image } = await this.supabase.storage
-      .from('sound-request')
-      .upload(
-        `images/${crypto.randomUUID()}.${req.file.type.split('/')[1]}`,
-        req.file,
-      );
+ async login(body:{email: string; password: string}) {
+    
+  
+    const { data, error } = await this.supabase.auth.signInWithPassword(body);
+    if (data && !error) {
 
-    if (image) {
-      data.image_path = image.path;
+      localStorage.setItem('token', data.session?.access_token);
+
+      return true;
     }
+   
+      throw new Error("이메일 또는 비밀번호가 올바르지 않습니다.")
 
-    await this.supabase.from('sound_request').insert([data]);
-
-    return data;
-  }
+}
 }

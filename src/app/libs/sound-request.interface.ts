@@ -1,4 +1,5 @@
 export interface SoundRequest {
+  id: string;
   name: string;
   email: string;
   characterName: string;
@@ -7,6 +8,7 @@ export interface SoundRequest {
   characterLocation: string;
   description: string;
   image_path: string;
+  created_at: Date;
 }
 
 export interface CreateSoundRequest {

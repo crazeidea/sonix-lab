@@ -1,5 +1,6 @@
 import {
   ApplicationConfig,
+  LOCALE_ID,
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection,
 } from '@angular/core';
@@ -10,6 +11,9 @@ import {
   provideClientHydration,
   withEventReplay,
 } from '@angular/platform-browser';
+import ko from '@angular/common/locales/ko'
+import { registerLocaleData } from '@angular/common';
+registerLocaleData(ko, 'ko-KR')
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,5 +21,9 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideRouter(routes, withViewTransitions()),
     provideClientHydration(withEventReplay()),
+    {
+      provide: LOCALE_ID, 
+      useValue: 'ko-KR'
+    }
   ],
 };

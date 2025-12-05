@@ -1,0 +1,14 @@
+<main class="flex justify-center items-center w-screen h-screen">
+    <form class="flex gap-4 flex-col" [formGroup]="loginForm" (ngSubmit)="submit()">
+        <app-logo class="text-base-content" class="size-16" />
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">이메일</legend>
+            <input class="input" type="text" autocomplete="email" formControlName="email" />
+        </fieldset>
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">비밀번호</legend>
+            <input class="input" type="password" autocomplete="current-password" formControlName="password" />
+        </fieldset>
+        <button type="submit" class="btn btn-primary">로그인</button>
+    </form>
+</main>
