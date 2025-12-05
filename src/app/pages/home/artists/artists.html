@@ -18,7 +18,7 @@
   </div>
 
   <div role="list" class="flex overflow-x-auto snap-x">
-    @for (artist of artists.value(); track $index) {
+    @for (artist of artists; track $index) {
       <button
         class="card bg-base-100 lg:min-w-auto lg:basis-1/5 min-w-screen snap-center shadow-sm"
         (click)="

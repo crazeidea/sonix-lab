@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { environment } from '../../environments/environment';
+import {
+  CreateSoundRequest,
+  SoundRequest,
+} from '../libs/sound-request.interface';
 
 @Injectable({ providedIn: 'root' })
 export class SupabaseService {
@@ -13,56 +17,31 @@ export class SupabaseService {
     );
   }
 
-  getArtists() {
-    return this.supabase
-      .from('artist')
-      .select()
-      .then(({ data, error }) => {
-        if (error) {
-          console.error('Error fetching artists:', error);
-          return [];
-        }
-        return data;
-      });
-  }
-
-  async createSoundRequest(req: {
-    image: File;
-    description: string;
-    voice?: File;
-  }) {
-    const data: {
-      description: string;
-      image_path?: string;
-      voice_path?: string;
-    } = {
+  async createSoundRequest(req: CreateSoundRequest) {
+    const data: SoundRequest = {
+      name: req.name,
+      email: req.email,
+      characterName: req.characterName,
+      characterAge: req.characterAge,
+      characterCountry: req.characterCountry,
+      characterLocation: req.characterLocation,
       description: req.description,
-      image_path: undefined,
-      voice_path: undefined,
+      image_path: '',
     };
 
     const { data: image } = await this.supabase.storage
       .from('sound-request')
       .upload(
-        `images/${crypto.randomUUID()}.${req.image.type.split('/')[1]}`,
-        req.image,
+        `images/${crypto.randomUUID()}.${req.file.type.split('/')[1]}`,
+        req.file,
       );
 
     if (image) {
       data.image_path = image.path;
     }
-    if (req.voice) {
-      const { data: voice } = await this.supabase.storage
-        .from('sound-request')
-        .upload(
-          `voices/${crypto.randomUUID()}.${req.voice.type.split('/')[1]}`,
-          req.voice,
-        );
-      if (voice) {
-        data.voice_path = voice.path;
-      }
-    }
 
-    return this.supabase.from('sound_request').insert([data]);
+    await this.supabase.from('sound_request').insert([data]);
+
+    return data;
   }
 }

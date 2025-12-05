@@ -8,10 +8,8 @@ import {
   viewChild,
 } from '@angular/core';
 
-import { register, SwiperContainer } from 'swiper/element/bundle';
-import { Artists } from '../../../libs/artists.const';
 import { SupabaseService } from '../../../services/supabase.service';
-register();
+import { Artists } from '../../../libs/artists.const';
 
 @Component({
   selector: 'app-artists',
@@ -24,15 +22,9 @@ register();
   },
 })
 export class ArtistsSection {
-  swiperRef = viewChild<ElementRef<SwiperContainer>>('swiperRef');
-  private readonly supabaseService = inject(SupabaseService);
-
-  artists = resource({
-    loader: () => this.supabaseService.getArtists(),
-    defaultValue: [],
-  });
+  artists = Artists;
 
   getArtist(name: string) {
-    return this.artists.value().find((artist) => artist.name === name);
+    return this.artists.find((artist) => artist.name === name);
   }
 }

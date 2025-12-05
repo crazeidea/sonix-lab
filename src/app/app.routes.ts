@@ -11,11 +11,10 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/home/home.page'),
       },
       {
-        path: 'sand-in-your-eyes',
-        loadComponent: () =>
-          import(
-            './pages/sand-in-your-eyes/sand-in-your-eyes/sand-in-your-eyes.page'
-          ),
+        path: 'sound-request',
+        loadComponent: () => {
+          return import('./pages/sound-request/sound-request.page');
+        },
       },
     ],
   },

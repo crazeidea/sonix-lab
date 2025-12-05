@@ -1,14 +1,46 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
 @import "tailwindcss";
 
 @theme {
   --font-sans: "Pretendard", sans-serif;
 }
 
-@plugin "daisyui" {
-  themes: black --default;
-}
+@plugin "daisyui";
 
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+  prefersdark: true;
+  color-scheme: "dark";
+  --color-base-100: oklch(14% 0 0);
+  --color-base-200: oklch(20% 0 0);
+  --color-base-300: oklch(26% 0 0);
+  --color-base-content: oklch(98% 0 0);
+  --color-primary: oklch(100% 0 0);
+  --color-primary-content: oklch(20% 0 0);
+  --color-secondary: oklch(27.581% 0.064 261.069);
+  --color-secondary-content: oklch(85.516% 0.012 261.069);
+  --color-accent: oklch(36.674% 0.051 338.825);
+  --color-accent-content: oklch(87.334% 0.01 338.825);
+  --color-neutral: oklch(26% 0 0);
+  --color-neutral-content: oklch(98% 0 0);
+  --color-info: oklch(54% 0.245 262.881);
+  --color-info-content: oklch(97% 0.014 254.604);
+  --color-success: oklch(78.119% 0.192 132.154);
+  --color-success-content: oklch(15.623% 0.038 132.154);
+  --color-warning: oklch(86.127% 0.136 102.891);
+  --color-warning-content: oklch(17.225% 0.027 102.891);
+  --color-error: oklch(71.753% 0.176 22.568);
+  --color-error-content: oklch(14.35% 0.035 22.568);
+  --radius-selector: 1rem;
+  --radius-field: 0.5rem;
+  --radius-box: 1rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}
 
 @layer utilities {
   .container {
@@ -21,11 +53,17 @@
   @apply selection:bg-neutral-900;
 }
 
-body {
-  @apply bg-black;
-}
-
 a[routerLink],
 a[href] {
   @apply cursor-pointer;
+}
+
+h1 {
+  @apply text-4xl font-bold;
+}
+h2 {
+  @apply text-3xl font-semibold;
+}
+h3 {
+  @apply text-2xl font-semibold;
 }

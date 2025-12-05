@@ -1,0 +1,271 @@
+<main class="container mx-auto p-4 flex flex-col gap-4">
+  <form [formGroup]="form" class="flex flex-col gap-8" (ngSubmit)="submit()">
+    <ul class="steps w-full">
+      <li class="step" [class.step-primary]="swiperContainer.swiper.realIndex >= 0">
+        승객 정보
+      </li>
+      <li class="step" [class.step-primary]="swiperContainer.swiper.realIndex >= 1">
+        여행지 정보
+      </li>
+      <li class="step" [class.step-primary]="swiperContainer.swiper.realIndex >= 2">
+        주문 제작서
+      </li>
+      <li class="step" [class.step-primary]="swiperContainer.swiper.realIndex >= 3">
+        결제 완료
+      </li>
+    </ul>
+
+    <swiper-container #swiperContainer>
+      <swiper-slide>
+        <div class="grid grid-cols-none gap-4 sm:grid-cols-2">
+          <h3>승객 정보</h3>
+          <fieldset class="fieldset">
+            <legend class="fieldset-legend">이름 / 텀블벅 아이디</legend>
+            <input spellcheck="false" class="input w-full" placeholder="이름 또는 텀블벅 아이디를 입력해주세요."
+              formControlName="name" />
+          </fieldset>
+
+          <fieldset class="fieldset">
+            <legend class="fieldset-legend">이메일 주소</legend>
+            <input spellcheck="false" class="input w-full" type="email" placeholder="이메일 주소를 입력해주세요."
+              formControlName="email" />
+          </fieldset>
+
+          <div role="alert" class="alert alert-warning sm:col-span-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <span>개인정보를 제외한 모든 정보는 사운드를 듣는 청자의 시점, 즉 본인
+              또는 설정하신 캐릭터의 관점에서 작성해주시기 바랍니다.</span>
+          </div>
+
+          <fieldset class="fieldset">
+            <legend class="fieldset-legend">이름</legend>
+            <input spellcheck="false" class="input w-full" placeholder="이름을 입력해주세요." formControlName="characterName" />
+          </fieldset>
+
+          <fieldset class="fieldset">
+            <legend class="fieldset-legend">나이</legend>
+            <input spellcheck="false" class="input w-full" type="number" inputmode="numeric" placeholder="나이를 입력해주세요."
+              formControlName="characterAge" />
+          </fieldset>
+
+          <fieldset class="fieldset">
+            <legend class="fieldset-legend">국적 / 배경</legend>
+            <textarea class="textarea w-full" placeholder="국적 또는 배경을 입력해주세요." rows="4"
+              formControlName="characterCountry"></textarea>
+          </fieldset>
+
+          <fieldset class="fieldset">
+            <legend class="fieldset-legend">체류지</legend>
+            <textarea class="textarea w-full" placeholder="체류지를 입력해주세요." rows="4"
+              formControlName="characterLocation"></textarea>
+            <p class="label">
+              제작하는 엠비언스의 큰 주제 (예: 평온한 숲, 영화 이웃집 토토로
+              등)을 적어주세요.
+            </p>
+          </fieldset>
+
+          <button type="button" class="btn btn-primary sm:col-span-2" [disabled]="!page1Valid()"
+            (click)="swiperContainer?.swiper?.slideNext()">
+            다음 페이지로
+          </button>
+        </div>
+      </swiper-slide>
+
+      <swiper-slide>
+        <div class="flex flex-col gap-4">
+          <h3>사진 업로드</h3>
+
+          <fieldset class="fieldset">
+            <legend class="fieldset-legend">Pick a file</legend>
+            <input spellcheck="false" #fileInput type="file" class="file-input w-full"
+              (input)="handleFileInput($event)" />
+          </fieldset>
+
+          @if (form.controls.photo.value; as file) {
+          <div class="card bg-base-200 shadow-md">
+            <img [src]="file | dataUrl | async" alt="Uploaded Image" />
+          </div>
+          }
+
+          <button type="button" class="btn btn-primary btn-block" [disabled]="!page2Valid()"
+            (click)="swiperContainer?.swiper?.slideNext()">
+            다음 페이지로
+          </button>
+        </div>
+      </swiper-slide>
+
+      <swiper-slide>
+        <div class="flex flex-col gap-4">
+          <h3>주문 제작서</h3>
+          <div role="alert" class="alert alert-warning sm:col-span-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <span>제작될 엠비언스에 포함되었으면 하는 요소와 스토리를 최대한
+              구체적으로 작성해주세요.</span>
+          </div>
+
+          <textarea class="textarea w-full" rows="16" formControlName="description"></textarea>
+
+          <button type="button" class="btn btn-primary btn-block" [disabled]="!page3Valid()"
+            (click)="swiperContainer?.swiper?.slideNext()">
+            다음 페이지로
+          </button>
+        </div>
+      </swiper-slide>
+
+      <swiper-slide>
+        <div class="flex gap-4 flex-col">
+          <h3 class="font-bold text-lg">저작권 및 이용 조건 안내</h3>
+
+          <div role="alert" class="alert alert-warning sm:col-span-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <span>아래 내용은 "동의합니다" 버튼 클릭 시 효력이 발생합니다.</span>
+          </div>
+
+          <ol class="list-decimal list-inside mt-2 space-y-2">
+            <li>
+              본 프로젝트를 통해 제작되는 모든 엠비언스 사운드 (이하 "저작물")의
+              저작권 및 저작인접권은 전부 Sonix Lab (소닉스랩)에 귀속됩니다.
+            </li>
+            <li>
+              제작물은 개인적 감상 목적으로만 이용하실 수 있으며, 아래의 행위는
+              엄격히 금지됩니다.
+
+              <ol class="list-disc list-inside mt-2 ml-4">
+                <li>
+                  상업적 이용 (유료 콘텐츠, 유튜브 / SNS 광고 수익, 게임 / 앱
+                  BGM 등 사용)
+                </li>
+                <li>배포, 재업로드, 재편집, 공유</li>
+                <li>제 3자에게 양도, 판매, 임대</li>
+              </ol>
+
+              위 금지 사항을 위반하거나 상업적 사용이 적발된 경우, Sonix Lab은
+              제작물 삭제 요청, 손해배상 청구, 법적 조치 등 필요한 모든 절차를
+              진행 할 수 있습니다.
+            </li>
+            <li>
+              후원자는 제작물의 일부 또는 전체에 대해 수정, 재믹싱, 편곡 등의
+              2차적 저작물 작성 권한을 갖지 않습니다.
+            </li>
+            <li>
+              후원자가 제공한 텍스트, 이미지, 스토리 등은 제작 목적 외에는
+              사용하지 않으며, Sonix Lab은 해당 후원자의 요청이 있을 경우
+              언제든지 자료를 삭제할 수 있습니다.
+            </li>
+            <li>
+              Sonix Lab은 후원자가 제공한 설정 (스토리, 환경, 이미지 등)을
+              기반으로 창작하지만, 최종 사운드의 구성, 해석, 표현 방식은
+              제작자의 창작 권한에 따라 결정됩니다.
+            </li>
+          </ol>
+
+          <button type="submit" class="btn btn-primary btn-block">
+            동의합니다
+          </button>
+        </div>
+      </swiper-slide>
+    </swiper-container>
+  </form>
+</main>
+
+<dialog #completeModal class="modal">
+  <div class="moda-box bg-white p-4 rounded-box flex flex-col gap-4">
+
+    <header class="flex justify-between items-center">
+      <app-logo class="size-16 text-info" />
+
+      <h3 class="text-info">예약 | Reservation</h3>
+    </header>
+
+    <div class="py-12 h-full flex justify-center items-center bg-center bg-cover px-4 text-info"
+      style="background-image:url(sky.jpg)">
+
+      <div class="bg-white rounded-box py-8 px-4 w-full flex flex-col gap-2">
+        <header class="flex items-center gap-2">
+          <span class="badge badge-info badge-lg">예약</span>
+          <span class="badge badge-secondary badge-lg">왕복</span>
+          <div class="flex-1 h-px border-b border-dashed border-info"></div>
+          <div>
+            <span>SONIX LAB AIRLINES</span>
+          </div>
+        </header>
+
+        <div class="flex gap-4 items-center">
+          <div class="flex flex-col items-center justify-center ">
+            <h2>IMG</h2>
+            <span class="text-sm">상상 속</span>
+          </div>
+
+          <div class="rounded-full  border border-info p-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+              viewBox="0 0 256 256"><!-- Icon from Phosphor by Phosphor Icons - https://github.com/phosphor-icons/core/blob/main/LICENSE -->
+              <path fill="currentColor"
+                d="M42.34 85.66a8 8 0 0 1 0-11.32l32-32A8 8 0 0 1 88 48v24h120a8 8 0 0 1 0 16H88v24a8 8 0 0 1-13.66 5.66Zm171.32 84.68l-32-32A8 8 0 0 0 168 144v24H48a8 8 0 0 0 0 16h120v24a8 8 0 0 0 13.66 5.66l32-32a8 8 0 0 0 0-11.32" />
+            </svg>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="flex flex-col items-center justify-center ">
+              <h2>???</h2>
+              <span> 도착지</span>
+            </div>
+
+            <div class="divider divider-horizontal divider-neutral opacity-20 mx-0"></div>
+
+            <div class="flex flex-col justify-center items-center gap-1">
+              <div class="flex  items-center justify-center gap-2 ">
+                <div class=" flex gap-1 items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24"><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE -->
+                    <path fill="currentColor"
+                      d="M10 22v-7H8V7h8v8h-2v7zm2-16q-.825 0-1.412-.587T10 4t.588-1.412T12 2t1.413.588T14 4t-.587 1.413T12 6" />
+                  </svg>
+                  <span class="text-sm">1</span>
+                </div>
+                <div class="flex-1 flex gap-1 items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24"><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE -->
+                    <path fill="currentColor"
+                      d="M8.5 6q-.825 0-1.412-.587T6.5 4t.588-1.412T8.5 2t1.413.588T10.5 4t-.587 1.413T8.5 6M5.575 20L3 7h2.05l2.2 11H14v2zM19.5 22l-2.9-5H8.025L6.6 10.05q-.275-1.2.563-2.125T9.2 7q.875 0 1.588.525T11.7 8.95L12.8 14h4.375l4.075 7z" />
+                  </svg>
+                  <span class="text-sm">First Class</span>
+                </div>
+              </div>
+
+
+              <div class="flex gap-2 items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                  viewBox="0 0 24 24"><!-- Icon from Tabler Icons by Paweł Kuna - https://github.com/tabler/tabler-icons/blob/master/LICENSE -->
+                  <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                    stroke-width="2"
+                    d="m14.639 10.258l4.83-1.294a2 2 0 1 1 1.035 3.863L6.015 16.71l-4.45-5.02l2.897-.776l2.45 1.414l2.897-.776l-3.743-6.244l2.898-.777zM3 21h18" />
+                </svg>
+                <span class="text-sm">Anytime</span>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn btn-info" (click)="closeTicket()">
+            항공권 확인
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</dialog>

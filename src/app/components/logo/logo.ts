@@ -6,7 +6,8 @@ import { Component } from '@angular/core';
   styles: `
     svg {
       width: auto;
-      height:  100%;
+      height: 100%;
+      color: currentColor
     }
   `,
 })
