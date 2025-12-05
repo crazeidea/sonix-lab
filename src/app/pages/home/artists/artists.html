@@ -1,7 +1,4 @@
-<section
-  id="artists"
-  class="min-h-dvh text-white flex flex-col container gap-8 py-8"
->
+<section id="artists" class="min-h-dvh text-white flex flex-col container gap-8 py-8">
   <h1 class="text-3xl sm:text-4xl font-extrabold">Artists</h1>
 
   <div class="h-px w-full bg-white"></div>
@@ -17,52 +14,45 @@
     <p>Sonix Lab입니다.</p>
   </div>
 
-  <div role="list" class="flex overflow-x-auto snap-x">
+  <swiper-container #swiperContainer [options]="swiperOptions" init="false">
     @for (artist of artists; track $index) {
-      <button
-        class="card bg-base-100 lg:min-w-auto lg:basis-1/5 min-w-screen snap-center shadow-sm"
-        (click)="
+    <swiper-slide>
+      <button class="flex flex-col gap-4 cursor-pointer" (click)="
           artistDetailDialog.setAttribute('data-artist', artist.name);
           artistDetailDialog.showModal()
-        "
-      >
-        <figure>
-          <img
-            [src]="artist.name + '.jpeg'"
-            [alt]="artist.name"
-            class="grayscale hover:grayscale-0 w-full aspect-[9/16] object-cover"
-            style="transition: filter 0.3s ease-in-out"
-          />
-        </figure>
-        <div class="card-body *:text-left">
-          <h2 class="card-title">{{ artist.name }}</h2>
-          <p>{{ artist.role }}</p>
-          <p>&#64;{{ artist.instagram }}</p>
+        ">
+        <img [src]="artist.name + '.jpeg'" [alt]="artist.name"
+          class="grayscale hover:grayscale-0 w-full aspect-[9/16] object-cover"
+          style="transition: filter 0.3s ease-in-out" />
+        <div class="flex flex-col gap-2 items-start">
+          <h3>{{ artist.name }}</h3>
+          <p class="text-sm font-bold">{{ artist.role }}</p>
+          <p class="text-sm font-bold">&#64;{{ artist.instagram }}</p>
         </div>
       </button>
+    </swiper-slide>
     }
-  </div>
+  </swiper-container>
 </section>
 
 <dialog #artistDetailDialog class="modal">
   @let name = artistDetailDialog.getAttribute("data-artist");
   @if (name) {
-    @let artist = getArtist(name);
-    @if (artist) {
-      <div class="modal-box bg-base-200">
-        <img
-          [src]="artist.name + '.jpeg'"
-          [alt]="artist.name"
-          class="w-full aspect-[9/16] object-cover object-center mb-4"
-        />
-        <h2 class="text-2xl font-extrabold">{{ artist.name }}</h2>
-        <p>{{ artist.role }}</p>
-        <p>&#64;{{ artist.instagram }}</p>
-      </div>
+  @let artist = getArtist(name);
+  @if (artist) {
+  <div class="modal-box bg-base-200">
+    <img [src]="artist.name + '.jpeg'" [alt]="artist.name"
+      class="w-full aspect-[9/16] object-cover object-center mb-4" />
+    <h3>{{ artist.name }}</h3>
+    <p class="text-sm font-bold">{{ artist.role }}</p>
+    <p class="text-sm font-bold">&#64;{{ artist.instagram }}</p>
 
-      <form method="dialog" class="modal-backdrop">
-        <button>close</button>
-      </form>
-    }
+    <article>
+      {{artist.intro}}
+    </article>
+
+    <button class="btn btn-block btn-primary mt-4" (click)="artistDetailDialog.close()">Close</button>
+  </div>
+  }
   }
 </dialog>
